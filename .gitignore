@@ -1,0 +1,23 @@
+# Ignore build output
+build/
+
+# ROMs
+*.sfc
+*.smc
+*.nes
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+*.code-workspace
+
+# Debug
+debug/
