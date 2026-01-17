@@ -23,6 +23,7 @@ JOY1H       = $4219           ; Joypad 1 high byte
 .include "engine/input.pasm"
 .include "engine/scheduler.pasm"
 .include "data/items.pasm"
+.include "data/monsters_dw4.pasm"
 
 ; ============================================================================
 ; Code Entry Point
