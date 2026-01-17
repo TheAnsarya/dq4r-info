@@ -1,0 +1,54 @@
+; Spells: 50 spells from DW4
+SPELL_COUNT = $32
+
+SPELL_TABLE:
+spell_00: .byte $4a, $15, $c8, $10, $07, $03 ; spell_00
+spell_01: .byte $01, $03, $03, $42, $25, $c0 ; spell_01
+spell_02: .byte $51, $2c, $14, $10, $00, $e0 ; spell_02
+spell_03: .byte $73, $3f, $1f, $1c, $fb, $fb ; spell_03
+spell_04: .byte $35, $c0, $30, $23, $98, $67 ; spell_04
+spell_05: .byte $04, $04, $00, $3f, $f8, $67 ; spell_05
+spell_06: .byte $15, $15, $12, $4a, $45, $c8 ; spell_06
+spell_07: .byte $7f, $03, $17, $13, $14, $17 ; spell_07
+spell_08: .byte $0c, $03, $07, $03, $4a, $55 ; spell_08
+spell_09: .byte $00, $ff, $17, $17, $0b, $0b ; spell_09
+spell_0a: .byte $06, $05, $4a, $65, $c8, $60 ; spell_0a
+spell_0b: .byte $03, $03, $07, $07, $08, $07 ; spell_0b
+spell_0c: .byte $e7, $4a, $75, $c8, $70, $e0 ; spell_0c
+spell_0d: .byte $0c, $bf, $67, $1c, $4a, $24 ; spell_0d
+spell_0e: .byte $3f, $3f, $90, $08, $10, $60 ; spell_0e
+spell_0f: .byte $90, $38, $f0, $e0, $80, $80 ; spell_0f
+spell_10: .byte $c8, $31, $18, $ff, $3c, $78 ; spell_10
+spell_11: .byte $28, $68, $68, $a8, $80, $80 ; spell_11
+spell_12: .byte $c8, $41, $00, $ff, $b4, $54 ; spell_12
+spell_13: .byte $5b, $6b, $6b, $6d, $4a, $54 ; spell_13
+spell_14: .byte $00, $ff, $ad, $b6, $b7, $b7 ; spell_14
+spell_15: .byte $db, $db, $4a, $64, $c8, $61 ; spell_15
+spell_16: .byte $dd, $dd, $ee, $ef, $f7, $f7 ; spell_16
+spell_17: .byte $80, $4a, $74, $c8, $71, $c0 ; spell_17
+spell_18: .byte $01, $e0, $80, $4a, $23, $c8 ; spell_18
+spell_19: .byte $07, $03, $0d, $1a, $03, $0d ; spell_19
+spell_1a: .byte $33, $c0, $32, $55, $d2, $af ; spell_1a
+spell_1b: .byte $20, $34, $44, $50, $d0, $af ; spell_1b
+spell_1c: .byte $25, $16, $05, $4a, $43, $c8 ; spell_1c
+spell_1d: .byte $c7, $4a, $31, $80, $81, $c0 ; spell_1d
+spell_1e: .byte $42, $53, $c0, $52, $e0, $f0 ; spell_1e
+spell_1f: .byte $78, $7c, $be, $bf, $01, $03 ; spell_1f
+spell_20: .byte $03, $01, $00, $00, $4a, $63 ; spell_20
+spell_21: .byte $00, $ff, $df, $e7, $f8, $3f ; spell_21
+spell_22: .byte $ff, $ff, $4a, $73, $c8, $72 ; spell_22
+spell_23: .byte $7f, $9f, $03, $0a, $18, $05 ; spell_23
+spell_24: .byte $05, $3f, $1f, $0f, $0f, $0f ; spell_24
+spell_25: .byte $1f, $10, $10, $10, $38, $c8 ; spell_25
+spell_26: .byte $0d, $7e, $f7, $3b, $bd, $bd ; spell_26
+spell_27: .byte $c3, $81, $81, $42, $42, $81 ; spell_27
+spell_28: .byte $0a, $1c, $0d, $88, $0c, $0d ; spell_28
+spell_29: .byte $0f, $1f, $1f, $0f, $0f, $06 ; spell_29
+spell_2a: .byte $10, $20, $01, $02, $04, $0a ; spell_2a
+spell_2b: .byte $88, $0c, $15, $7f, $e3, $07 ; spell_2b
+spell_2c: .byte $10, $10, $08, $10, $10, $20 ; spell_2c
+spell_2d: .byte $20, $02, $1c, $1d, $80, $0c ; spell_2d
+spell_2e: .byte $18, $18, $08, $0c, $07, $01 ; spell_2e
+spell_2f: .byte $20, $20, $10, $10, $08, $06 ; spell_2f
+spell_30: .byte $14, $1d, $01, $0f, $c3, $e7 ; spell_30
+spell_31: .byte $c3, $0b, $18, $25, $89, $10 ; spell_31
