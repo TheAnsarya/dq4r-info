@@ -26,6 +26,8 @@ JOY1H       = $4219           ; Joypad 1 high byte
 .include "data/items_dw4.pasm"
 .include "data/shops_dw4.pasm"
 .include "data/spells_dw4.pasm"
+.include "data/encounters_dw4.pasm"
+.include "data/characters_dw4.pasm"
 
 ; ============================================================================
 ; Code Entry Point
