@@ -9,6 +9,20 @@ lorom
 ; Minimal Hardware Constants
 ; ============================================================================
 PPU_INIDISP = $2100           ; Screen display
+PPU_BGMODE  = $2105           ; BG mode/size
+PPU_TM      = $212c           ; Enable BG layers
+PPU_CGADDR  = $2121           ; CGRAM address
+PPU_CGDATA  = $2122           ; CGRAM data
+NMITIMEN    = $4200           ; Interrupt enable (NMI/IRQ, joypad auto-read)
+RDNMI       = $4210           ; NMI flag (read to acknowledge)
+JOY1L       = $4218           ; Joypad 1 low byte
+JOY1H       = $4219           ; Joypad 1 high byte
+
+; Engine modules
+.include "engine/core.pasm"
+.include "engine/input.pasm"
+.include "engine/scheduler.pasm"
+.include "data/items.pasm"
 
 ; ============================================================================
 ; Code Entry Point
@@ -25,8 +39,22 @@ rep #$30                   ; 16-bit A/X/Y
 lda #$1fff                 ; Stack pointer
 tcs                        ; Set stack
 
+; Enable NMI and joypad auto-read
+sep #$20                   ; 8-bit A
+lda #$81                   ; b7=NMI enable, b0=joypad auto-read
+sta NMITIMEN
+rep #$20                   ; 16-bit A
+
+; Initialize engine state (DQ3r-based)
+jsr engine_init
+
+; Basic PPU init (keep screen on)
+jsr init_ppu
+
 ; Main loop - just wait for interrupt
 loop1:
+jsr read_input            ; Read joypad into WRAM
+jsr engine_tick           ; Per-frame engine work
 wai                        ; Wait for V-Blank
 jmp loop1                  ; Loop forever
 
@@ -35,6 +63,10 @@ jmp loop1                  ; Loop forever
 ; ============================================================================
 
 nmi_handler:
+sep #$20                   ; 8-bit A
+lda RDNMI                  ; Acknowledge NMI
+rep #$20                   ; 16-bit A
+jsr engine_vblank          ; Run engine VBlank logic
 rti
 
 irq_handler:
@@ -48,6 +80,34 @@ rti
 
 abort_handler:
 rti
+
+; =========================================================================
+; Basic PPU Initialization
+; =========================================================================
+init_ppu:
+	sep #$20                   ; 8-bit A
+	lda #$8f                   ; Forced blank + brightness 15
+	sta PPU_INIDISP
+	lda #$00                   ; Mode 0
+	sta PPU_BGMODE
+	lda #$01                   ; Enable BG1 only
+	sta PPU_TM
+	; Simple palette: CGRAM color 0 = black, color 1 = white
+	lda #$00
+	sta PPU_CGADDR             ; CGRAM addr = 0
+	lda #$00                   ; color 0 = $0000
+	sta PPU_CGDATA
+	sta PPU_CGDATA
+	lda #$01                   ; CGRAM addr = 1
+	sta PPU_CGADDR
+	lda #$ff                   ; white low byte (BGR555)
+	sta PPU_CGDATA
+	lda #$7f                   ; white high byte
+	sta PPU_CGDATA
+	lda #$0f                   ; Turn display on (brightness 15)
+	sta PPU_INIDISP
+	rep #$20                   ; 16-bit A
+	rts
 
 ; ============================================================================
 ; ROM Header (0xFFC0)

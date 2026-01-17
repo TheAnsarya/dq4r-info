@@ -13,11 +13,11 @@ This document lists all planned GitHub issues for the DQ4r project with issue nu
 Set up integration with the Poppy custom SNES 65816 assembler for building DQ4r ROMs.
 
 **Acceptance Criteria**:
-- [ ] Poppy repository cloned/referenced
-- [ ] build.ps1 script created with Poppy integration
-- [ ] Test ROM compiles successfully
-- [ ] Symbol generation working
-- [ ] Build artifacts in gitignore
+- [x] Poppy repository cloned/referenced
+- [x] build.ps1 script created with Poppy integration
+- [x] Test ROM compiles successfully
+- [x] Symbol generation working
+- [x] Build artifacts in gitignore
 
 **Tasks**:
 - Verify Poppy supports `.system:snes`
@@ -25,6 +25,11 @@ Set up integration with the Poppy custom SNES 65816 assembler for building DQ4r 
 - Test compile of existing main.asm
 - Add build output validation
 - Document build process
+
+**Status**:
+- Build system implemented and verified with first successful ROM (32 KB)
+- Poppy CLI auto-discovery and compilation working
+- Listings and symbols generated to `build/`
 
 **Related**: #2, #3
 

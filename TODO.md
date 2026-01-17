@@ -3,12 +3,13 @@
 ## Foundation Phase (M1) - Current Focus
 
 ### Build System & Infrastructure
-- [ ] **Issue #1**: Set up Poppy Compiler Integration
-  - [ ] Reference Poppy repository
-  - [ ] Create build.ps1 with Poppy invocation
-  - [ ] Implement test ROM compilation
-  - [ ] Add symbol file generation
-  - [ ] Setup build artifact management
+- [x] **Issue #1**: Set up Poppy Compiler Integration
+  - [x] Reference Poppy repository
+  - [x] Create build.ps1 with Poppy invocation
+  - [x] Implement test ROM compilation
+  - [x] Add symbol file generation
+  - [x] Setup build artifact management
+  - [x] Validate output ROM and commit success report
 
 - [ ] **Issue #2**: Create Asset Processing Pipeline
   - [ ] Design asset directory structure
@@ -59,6 +60,11 @@
   - [ ] Game state update dispatcher
   - [ ] Graphics queue system
   - [ ] Audio queue system
+
+#### New Near-Term Tasks (M2 bootstrap)
+- [ ] Enable NMI (write $4200 NMITIMEN) and confirm WAI resumes
+- [ ] Add `read_input` stub (read $4218/$4219) and store to WRAM
+- [ ] Add simple PPU init (BG mode, brightness) and keep screen on
 
 ### Graphics
 - [ ] **Issue #7**: Graphics Engine - Tile Rendering
