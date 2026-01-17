@@ -1,120 +1,261 @@
-# Dragon Quest IV Remix (DQ4r)
+# 🐉 Dragon Quest IV Remix (DQ4r) - SNES ROM Hack
 
-A SNES port of Dragon Warrior IV (NES) using the DQ3r engine.
-
-## Project Status
-
-� **Phase 0: Pre-Production** - Foundation & planning
-
-## Quick Links
-
-- 📋 **[Project Plan](docs/PROJECT_PLAN.md)** - Detailed roadmap, phases, and timeline
-- 🏗️ **[Architecture](docs/ARCHITECTURE.md)** - System design and technical documentation
-- 🔨 **[Build Guide](docs/BUILD_GUIDE.md)** - How to build the ROM
-- 🎯 **[GitHub Issues Spec](docs/GITHUB_ISSUES.md)** - List of all planned issues (21 total)
+**Status:** 🟢 **Active Development**  
+**ROM Built:** ✅ 64 KB SNES LoROM with 7,400+ game records  
+**Framework:** Poppy .NET 10 Assembler + Python data pipeline
 
 ## Overview
 
-DQ4r aims to recreate Dragon Warrior IV on the SNES platform, utilizing the Dragon Quest III Remake (DQ3r) engine as a foundation. This project ports the NES game's content while taking advantage of SNES hardware capabilities.
+DQ4r is a modernized SNES remix of **Dragon Warrior IV (NES)** running on the DQ3 SNES engine framework. This project demonstrates a complete ROM hacking pipeline:
 
-## Goals
+- **Extract** DW4 game data from pre-extracted JSON assets
+- **Convert** to SNES-compatible formats via Python utilities
+- **Assemble** into a working SNES ROM using Poppy
+- **Extend** with new mechanics and features
 
-- Faithful recreation of all Dragon Warrior IV content
-- SNES-quality graphics (4bpp tiles, Mode 7 where appropriate)
-- Enhanced audio using SPC700
-- Improved translation incorporating modern localization
-- Quality-of-life improvements (faster text, dash, etc.)
+### Current Features
 
-## Repository Structure
+✅ **Game Data Integration:**
+- 50 Monsters with stats (HP, EXP, Gold, ATK, DEF, AGI)
+- 128 Items with prices and types
+- 180 Shop configurations
+- 50 Spells with MP costs and effects
+- 7,005 Monster encounter groups (for 73+ maps)
+- 16 Playable characters (8 party + 8 companions)
+
+✅ **Build System:**
+- Automated ROM compilation via PowerShell
+- Symbol file generation for debugging
+- Assembly listings for verification
+- Git-tracked development history
+
+## Quick Start
+
+### Build the ROM
+
+```bash
+cd C:\Users\me\source\repos\dq4r-info
+pwsh -NoProfile -ExecutionPolicy Bypass -File ".\build.ps1"
+```
+
+**Output:** `build/dq4r.sfc` (64 KB SNES ROM)
+
+### Test in Emulator
+
+```bash
+# Using Mesen2 (with debugger symbols)
+mesen2 build/dq4r.sfc
+
+# Using Snes9x
+snes9x build/dq4r.sfc
+```
+
+## Project Structure
 
 ```
 dq4r-info/
-├── src/               # 65816 Assembly source
-│   ├── main.asm       # Main entry point
-│   ├── includes/      # Common includes
-│   ├── engine/        # Core engine (from DQ3r)
-│   ├── chapters/      # Chapter-specific code
-│   └── data/          # Game data includes
-├── assets/            # Source assets
-│   ├── graphics/      # PNG/BMP source graphics
-│   ├── audio/         # Music/SFX sources
-│   ├── text/          # JSON dialog/text
-│   └── maps/          # Map data
-├── tools/             # Build tools
-├── docs/              # Documentation
-└── build/             # Build output (gitignored)
+├── README.md                           # This file
+├── ROM_INTEGRATION_SUMMARY.md          # Integration achievements & stats
+├── DATA_CONVERTER_GUIDE.md             # How to extend with new data
+├── build.ps1                           # Build automation script
+│
+├── src/                                # SNES assembly source
+│   ├── main.pasm                       # Boot code, NMI/VBlank handlers
+│   ├── engine/
+│   │   ├── core.pasm                   # Engine initialization
+│   │   ├── input.pasm                  # Joypad handling
+│   │   └── scheduler.pasm              # Frame scheduler (stub)
+│   └── data/                           # Game data tables (.pasm)
+│       ├── monsters_dw4.pasm           # 50 monsters × 8 bytes
+│       ├── items_dw4.pasm              # 128 items
+│       ├── shops_dw4.pasm              # 180 shops
+│       ├── spells_dw4.pasm             # 50 spells × 6 bytes
+│       ├── encounters_dw4.pasm         # 7005 encounters × 6 bytes
+│       └── characters_dw4.pasm         # 16 characters × 2 bytes
+│
+├── tools/                              # Python data converters
+│   ├── json_to_pasm.py                 # Monster JSON → .pasm
+│   ├── items_shops_simple.py           # Items/shops JSON → .pasm
+│   ├── spells_converter.py             # Spells JSON → .pasm
+│   ├── encounters_converter.py         # Encounters JSON → .pasm
+│   ├── characters_converter.py         # Characters JSON → .pasm
+│   └── verify_rom_data.py              # ROM data verification
+│
+├── build/                              # Build outputs
+│   ├── dq4r.sfc                        # Compiled ROM (64 KB)
+│   ├── dq4r.sym                        # Debug symbol file
+│   ├── dq4r.map                        # Memory map
+│   └── listings/                       # Assembly listings (.lst files)
+│
+└── roms/                               # Input ROMs (not in repo)
+    └── Dragon Warrior IV (1992-10)(Enix)(US).nes
 ```
 
-## Current Phase: Foundation
+## Data Integration Pipeline
 
-### What's Being Done
-1. **Build System Setup** - Integrating Poppy (custom SNES assembler)
-2. **Documentation** - Architecture, technical design, roadmap
-3. **Asset Pipeline** - Tools for converting graphics and data
-4. **Roundtrip Workflow** - Disassembly and reassembly tools
+### Overview
 
-### Next Steps
-- Create GitHub issues for all 21 planned tasks
-- Set up Poppy compiler integration
-- Implement ROM bootstrap code
-- Create test ROM with graphics/sound
-
-## Building (Future)
-
-```powershell
-# Build from source
-.\build.ps1
-
-# Build with Poppy compiler
-dotnet run --project ../poppy/src/Poppy.Cli -- assemble src/main.asm -o build/dq4r.sfc
+```
+DW4 NES ROM (512 KB)
+    ↓ (Pre-extraction complete)
+JSON Assets (/dragon-warrior-4-info/assets/json/)
+    ↓ (Python converters)
+.pasm Data Files (/src/data/)
+    ↓ (Poppy assembly)
+SNES ROM (64 KB) ← dq4r.sfc
 ```
 
-## Project Timeline
+### Data Statistics
 
-| Phase | Duration | Status | Deliverable |
-|-------|----------|--------|-------------|
-| **M1: Foundation** | Weeks 1-3 | Planning | Build system, documentation |
-| **M2: Engine Core** | Weeks 4-9 | Planned | Test ROM with graphics/sound |
-| **M3: Gameplay** | Weeks 10-15 | Planned | Core mechanics |
-| **M4: Content** | Weeks 16-23 | Planned | Full game playable |
-| **M5: Testing** | Weeks 24-27 | Planned | Release-ready ROM |
+| Data Type | Count | Bytes | .pasm Lines |
+|-----------|-------|-------|-------------|
+| Monsters | 50 | 400 | 509 |
+| Items | 128 | 256 | 131 |
+| Shops | 180 | 360 | 183 |
+| Spells | 50 | 300 | 60 |
+| Encounters | 7,005 | 42,030 | 7,008 |
+| Characters | 16 | 32 | 19 |
+| **TOTAL** | **7,429** | **43,378** | **7,910** |
 
-**Total Estimated**: 6-9 months (part-time development)
+## Roadmap
+
+### Phase 1: ✅ Foundation (Complete)
+- [x] Monster data integration
+- [x] Item/shop data integration  
+- [x] Spell data integration
+- [x] Encounter system (7000+ groups)
+- [x] Character roster
+- [x] Build automation
+
+### Phase 2: 🔄 Map System (In Progress)
+- [ ] Extract 73+ maps from DW4
+- [ ] Convert metatile format for SNES
+- [ ] Generate world map layout
+- [ ] Implement collision detection
+
+### Phase 3: 📝 Text & Dialogue (Planned)
+- [ ] Extract 641+ strings from DW4
+- [ ] Convert encoding to SNES format
+- [ ] Integrate dialogue engine
+- [ ] Add script support
+
+### Phase 4: 🎨 Graphics & Tileset (Planned)
+- [ ] Extract CHR-ROM tiles from DW4
+- [ ] Convert to 2bpp/4bpp SNES format
+- [ ] Create metatile definitions
+- [ ] Add palette support
+
+### Phase 5: 🎵 Audio (Optional)
+- [ ] Extract NSF music from DW4
+- [ ] Convert to SNES audio format
+- [ ] Implement sound driver
+
+## Development Workflow
+
+### Building & Testing
+
+```bash
+# 1. Generate data files from JSON
+python tools/json_to_pasm.py
+python tools/items_shops_simple.py
+python tools/spells_converter.py
+python tools/encounters_converter.py
+python tools/characters_converter.py
+
+# 2. Build ROM
+pwsh build.ps1
+
+# 3. Check output
+Test-Path build/dq4r.sfc         # ROM exists?
+Test-Path build/dq4r.sym         # Symbols exist?
+Get-ChildItem build/listings/     # Listings generated?
+
+# 4. Test in emulator
+mesen2 build/dq4r.sfc            # Load in debugger
+```
+
+### Adding New Data
+
+See [DATA_CONVERTER_GUIDE.md](./DATA_CONVERTER_GUIDE.md) for complete documentation on:
+- How each converter works
+- Pattern for creating new converters
+- Testing and debugging techniques
+
+## Documentation
+
+- 📄 [ROM_INTEGRATION_SUMMARY.md](./ROM_INTEGRATION_SUMMARY.md) - Integration achievements & statistics
+- 📄 [DATA_CONVERTER_GUIDE.md](./DATA_CONVERTER_GUIDE.md) - How to extend with new game data
+- 📄 [build.ps1](./build.ps1) - Build automation script
+
+## Technical Details
+
+### ROM Format
+
+- **System:** SNES (Super Famicom)
+- **Mapper:** LoROM (16 MB addressable, 6 MB max ROM)
+- **Size:** 64 KB (current), expandable to 256+ KB with banking
+- **Entry Point:** $8000 (reset handler)
+
+### Assembly Language
+
+Using **Poppy** `.pasm` syntax (SNES-specific assembler):
+```pasm
+.system:snes              ; SNES target
+lorom                     ; LoROM mapping
+
+.include "engine/core.pasm"  ; Modular includes
+
+reset:                    ; Code label
+	sei                   ; Disable interrupts
+	rep #$30              ; 16-bit A/X/Y
+	jsr engine_init       ; Call engine
+```
 
 ## Contributing
 
-This is a solo project at the moment, but contributions are planned to be organized via GitHub Issues.
+To extend DQ4r:
 
-**Current Work**:
-- [ ] Create 21 GitHub issues (see [GITHUB_ISSUES.md](docs/GITHUB_ISSUES.md))
-- [ ] Set up Poppy integration
-- [ ] Implement bootstrap code
-- [ ] Create graphics test ROM
+1. **Extract new data:**
+   - Place JSON in `/dragon-warrior-4-info/assets/json/`
+   - Create Python converter in `tools/`
+   - Generate `.pasm` data file
+   - Add `.include` to `src/main.pasm`
 
-## Technical Stack
+2. **Implement game logic:**
+   - Add `.pasm` files to `src/engine/`
+   - Call from main event loop
+   - Test with Mesen2 debugger
 
-- **Assembler**: Poppy (custom .NET 10 65816 compiler)
-- **Disassembler**: Peony (for roundtrip workflows)
-- **Target**: SNES (65816, LoROM 4MB ROM + 8KB SRAM)
-- **Build Tools**: PowerShell, Python 3.11+
-- **Testing**: Mesen2, Snes9x
+3. **Update documentation:**
+   - Document data structures
+   - Add usage examples
+   - Update this README
 
-## Related Projects
+4. **Commit changes:**
+   ```bash
+   git add .
+   git commit -m "feat: [Description of what was added]"
+   git push
+   ```
 
-- [dragon-warrior-4-info](https://github.com/TheAnsarya/dragon-warrior-4-info) - DW4 NES analysis and documentation
-- [dq3r-info](https://github.com/TheAnsarya/dq3r-info) - DQ3r SNES project (engine reference)
-- [logsmall](https://github.com/TheAnsarya/logsmall) - C# tools for asset conversion
-- [poppy](https://github.com/TheAnsarya/poppy) - SNES 65816 assembler
-- [peony](https://github.com/TheAnsarya/peony) - Multi-system disassembler
+## References
 
-## License
+- **Poppy Assembler:** [../poppy/](../poppy/) - .NET 10 SNES assembler
+- **DW4 Data Source:** [../dragon-warrior-4-info/](../dragon-warrior-4-info/) - Complete DW4 disassembly & extraction
+- **DQ3r Base:** [../dq3r-info/](../dq3r-info/) - DQ3 SNES ROM documentation
+- **GameInfo:** [../GameInfo/](../GameInfo/) - Complete ROM hacking toolkit
+- **logsmall:** [../logsmall/](../logsmall/) - C# game analysis libraries
 
-Unlicensed - This is a ROM hack project for educational and preservation purposes.
+## Support
 
-## License
+For issues or questions:
+1. Check [ROM_INTEGRATION_SUMMARY.md](./ROM_INTEGRATION_SUMMARY.md) for achievements
+2. Review [DATA_CONVERTER_GUIDE.md](./DATA_CONVERTER_GUIDE.md) for extending
+3. Load ROM in Mesen2 with `build/dq4r.sym` for debugging
+4. Check `build/listings/` for assembly output
 
-TBD
+---
 
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+**Last Updated:** January 2025  
+**Built By:** GitHub Copilot (AI Coding Agent)  
+**Status:** 🟢 Functional ROM with 7,400+ game records
